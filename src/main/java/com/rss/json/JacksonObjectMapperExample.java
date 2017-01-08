@@ -7,8 +7,6 @@ package com.rss.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.rss.model.Address;
-import com.rss.model.Employee;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -22,7 +20,7 @@ import java.util.Map;
 
 
 public class JacksonObjectMapperExample {
-
+/*
     public static void main(String[] args) throws IOException {
 
         //read json file data to String
@@ -74,5 +72,5 @@ public class JacksonObjectMapperExample {
 
         return emp;
     }
-
+*/
 }

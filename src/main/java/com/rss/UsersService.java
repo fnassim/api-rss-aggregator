@@ -1,68 +1,46 @@
 package com.rss;
 
 import com.rss.Entities.User;
-import com.rss.model.Address;
-import com.rss.model.Employee;
+import com.rss.model.ServiceResponse;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.exception.ConstraintViolationException;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.util.List;
 
 
 @Path("/user")
 public class UsersService {
 
     @GET
-    @Path("/test")
     @Produces(MediaType.APPLICATION_JSON)
-    public Employee Hello() {
-        Address a = new Address();
-        Employee e = new Employee();
-        e.setAddress(a);
-        e.setId(42);
-        e.setName("loLzar");
-        e.setPermanent(true);
-        e.setPhoneNumbers(new long[]{0625252525, 062545654});
-        e.setRole("LELOL");
-
+    public User getUser(@QueryParam("username") String _username) {
         SessionFactory sessionFactory;
         sessionFactory = new Configuration()
                 .configure() // configures settings from hibernate.cfg.xml
                 .buildSessionFactory();
-
         Session session = sessionFactory.openSession();
 
         Transaction tx = session.beginTransaction();
-        User task = new User();
-        task.setId(new Long(3));
-        session.save(task);
+        List<User> result = (List<User>) session.createQuery("from User where username = '" + _username + "'").list();
         tx.commit();
         session.close();
 
-        //String result = "HELLO!";
-        // return Response.status(200).entity(result).build();
-        return e;
+        return result.get(0);
     }
 
-
-    @GET
+    @POST
+    @Path("/new")
     @Produces(MediaType.APPLICATION_JSON)
-    public Employee HelloWorld() {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public ServiceResponse newUser(User _user) {
 
-        Address a = new Address();
-        Employee e = new Employee();
-        e.setAddress(a);
-        e.setId(42);
-        e.setName("loLzar");
-        e.setPermanent(true);
-        e.setPhoneNumbers(new long[]{0625252525, 062545654});
-        e.setRole("LELOL");
 
         SessionFactory sessionFactory;
         sessionFactory = new Configuration()
@@ -72,15 +50,15 @@ public class UsersService {
         Session session = sessionFactory.openSession();
 
         Transaction tx = session.beginTransaction();
-        User task = new User();
-        task.setId(new Long(2));
-        session.save(task);
-        tx.commit();
+        session.save(_user);
+        try {
+            tx.commit();
+        } catch (PersistenceException e) {
+            return new ServiceResponse(403, "Username already exists", true);
+        }
         session.close();
 
-        //String result = "HELLO!";
-       // return Response.status(200).entity(result).build();
-        return e;
+        return new ServiceResponse(200, "mdp", false);
     }
 
 }
