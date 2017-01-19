@@ -1,5 +1,6 @@
 package com.rss;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rss.Entities.User;
 import com.rss.model.ServiceResponse;
 import org.hibernate.Session;
@@ -20,7 +21,7 @@ public class UsersService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User getUser(@QueryParam("username") String _username) {
+    public ServiceResponse getUser(@QueryParam("username") String _username) {
         SessionFactory sessionFactory;
         sessionFactory = new Configuration()
                 .configure() // configures settings from hibernate.cfg.xml
@@ -31,8 +32,16 @@ public class UsersService {
         List<User> result = (List<User>) session.createQuery("from User where username = '" + _username + "'").list();
         tx.commit();
         session.close();
-
-        return result.get(0);
+        if (result.size() == 0) {
+            return new ServiceResponse(404, "User doesn't exist", true);
+        }
+        String userJSON = "";
+        try {
+            userJSON = result.get(0).userToJSON();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new ServiceResponse(200, userJSON, false);
     }
 
     @POST

@@ -1,5 +1,9 @@
 package com.rss.Entities;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
 import javax.persistence.*;
 
 /**
@@ -34,4 +38,10 @@ public class User {
     public String getUsername() { return this.username; }
 
     public String getPassword() { return this.password; }
+
+    public String userToJSON() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        return mapper.writeValueAsString(this);
+    }
 }
