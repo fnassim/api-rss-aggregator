@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -18,9 +19,11 @@ public class Feed {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(name="url", unique = true)
     private String url;
 
+    @NotNull
     @Column(name="user_id")
     private int user_id;
 

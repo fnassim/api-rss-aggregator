@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by nassim_a on 30-Dec-16.
@@ -17,9 +18,11 @@ public class User {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(name="username", unique = true)
     private String username;
 
+    @NotNull
     @Column(name="password")
     private String password;
 
