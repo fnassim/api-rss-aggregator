@@ -70,4 +70,31 @@ public class UsersService {
         return new ServiceResponse(200, "mdp", false);
     }
 
+    @POST
+    @Path("/login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public ServiceResponse logUser(User _user) {
+        SessionFactory sessionFactory;
+        sessionFactory = new Configuration()
+                .configure() // configures settings from hibernate.cfg.xml
+                .buildSessionFactory();
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = session.beginTransaction();
+        List<User> result = (List<User>) session.createQuery("from User where username = '" + _user.getUsername() + "' AND password = '" + _user.getPassword() + "'").list();
+        tx.commit();
+        session.close();
+        if (result.size() == 0) {
+            return new ServiceResponse(404, "User doesn't exist", true);
+        }
+        String userJSON = "";
+        try {
+            userJSON = result.get(0).userToJSON();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new ServiceResponse(200, userJSON, false);
+    }
+
 }
