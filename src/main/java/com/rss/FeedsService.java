@@ -123,7 +123,7 @@ public class FeedsService {
     @Produces(MediaType.APPLICATION_JSON)
     public ArticlesResponse getArticles(@QueryParam("feed_url") String feed_url) {
 
-        SyndFeed feed = null;
+        SyndFeed feed;
         String img = null;
         try {
             feed = new SyndFeedInput().build(new XmlReader(new URL(feed_url)));
@@ -137,7 +137,7 @@ public class FeedsService {
                    else {
                        img = "";
                    }
-                articles.add(new FeedArticle(img, entry.getTitle(), entry.getUri(), entry.getPublishedDate()));
+                articles.add(new FeedArticle(img, entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate(), entry.getLink()));
 
             }
             return new ArticlesResponse(200, "OK", false, articles);

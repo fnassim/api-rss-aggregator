@@ -8,14 +8,16 @@ import java.util.Date;
 public class FeedArticle {
     String title;
     String description;
+    String url;
     String img_url;
     Date date;
 
-    public FeedArticle(String img_url, String title, String description, Date date) {
+    public FeedArticle(String img_url, String title, String description, Date date, String url) {
         this.title = title;
         this.img_url = img_url;
         this.date = date;
         this.description = description;
+        this.url = url;
     }
 
     public String getImgUrl() {
@@ -24,4 +26,7 @@ public class FeedArticle {
     public String getTitle() {
         return title;
     }
+    public String getDescription() { return description; }
+    public Date getDate() { return date; }
+    public String getUrl() { return url; }
 }
