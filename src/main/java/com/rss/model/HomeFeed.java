@@ -6,10 +6,12 @@ package com.rss.model;
 public class HomeFeed {
     private String  title;
     private String  url;
+    private String  description;
 
-    public HomeFeed(String url, String title) {
+    public HomeFeed(String url, String title, String description) {
         this.title = title;
         this.url = url;
+        this.description = description;
     }
 
     public String getUrl() {
@@ -18,4 +20,5 @@ public class HomeFeed {
     public String getTitle() {
         return title;
     }
+    public String getDescription() { return description; }
 }

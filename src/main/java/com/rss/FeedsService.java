@@ -52,7 +52,7 @@ public class FeedsService {
 
             try {
                 rss = new SyndFeedInput().build(new XmlReader(new URL(result.get(i).getUrl())));
-                feed.add(new HomeFeed(result.get(i).getUrl(), rss.getTitle()));
+                feed.add(new HomeFeed(result.get(i).getUrl(), rss.getTitle(), rss.getDescription()));
             } catch (FeedException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -60,7 +60,6 @@ public class FeedsService {
             }
         }
         FeedResponse resp = new FeedResponse(200, "ok",false, feed);
-//        String json = new Gson().toJson();
         return resp;
     }
 
