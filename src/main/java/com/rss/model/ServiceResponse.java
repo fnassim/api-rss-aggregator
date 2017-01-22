@@ -4,7 +4,6 @@ package com.rss.model;
  * Created by root on 07/01/17.
  */
 public class ServiceResponse {
-
     private int     code;
     private String  message;
     private boolean error;
@@ -14,8 +13,6 @@ public class ServiceResponse {
         this.message = message;
         this.error = error;
     }
-
-
 
     public int getCode() {
         return code;

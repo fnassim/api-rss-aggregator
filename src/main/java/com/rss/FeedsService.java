@@ -1,8 +1,13 @@
 package com.rss;
 
 import com.google.gson.Gson;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 import com.rss.Entities.Feed;
-import com.rss.model.ServiceResponse;
+import com.rss.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,6 +17,9 @@ import org.hibernate.query.Query;
 import javax.persistence.PersistenceException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +30,9 @@ import java.util.List;
 public class FeedsService {
 
     @GET
+    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public ServiceResponse getFeeds(@QueryParam("user_id") int user_id) {
+    public FeedResponse getFeeds(@QueryParam("user_id") int user_id) {
         SessionFactory sessionFactory;
         sessionFactory = new Configuration()
                 .configure() // configures settings from hibernate.cfg.xml
@@ -35,10 +44,25 @@ public class FeedsService {
         tx.commit();
         session.close();
         if (result.size() == 0) {
-            return new ServiceResponse(404, "User doesn't have any feed", true);
+            return new FeedResponse(404, "User doesn't have any feed", true, null);
         }
-        String json = new Gson().toJson(result);
-        return new ServiceResponse(200, json, false);
+
+        ArrayList<HomeFeed> feed = new ArrayList<>();
+        SyndFeed rss;
+        for (int i = 0; i < result.size(); i++){
+
+            try {
+                rss = new SyndFeedInput().build(new XmlReader(new URL(result.get(i).getUrl())));
+                feed.add(new HomeFeed(result.get(i).getUrl(), rss.getTitle()));
+            } catch (FeedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        FeedResponse resp = new FeedResponse(200, "ok",false, feed);
+//        String json = new Gson().toJson();
+        return resp;
     }
 
     @POST
@@ -84,7 +108,6 @@ public class FeedsService {
         Transaction tx = session.beginTransaction();
         Query query = session.createQuery("delete Feed where id = :ID");
         query.setParameter("ID", new Long(feed_id));
-
         int result = query.executeUpdate();
         session.close();
 
@@ -97,11 +120,26 @@ public class FeedsService {
     }
 
     @GET
+    @Path("/articles")
     @Produces(MediaType.APPLICATION_JSON)
-    public ServiceResponse getArticles(@QueryParam("feed_url") String feed_url) {
+    public ArticlesResponse getArticles(@QueryParam("feed_url") String feed_url) {
 
-        return new ServiceResponse(200, feed_url, false);
+        SyndFeed feed = null;
+        try {
+            feed = new SyndFeedInput().build(new XmlReader(new URL(feed_url)));
+            ArrayList<FeedArticle> articles = new ArrayList<>();
+            for (int i = 0; i < feed.getEntries().size(); i++){
+               SyndEntry entry = feed.getEntries().get(i);
+                articles.add(new FeedArticle(entry.getEnclosures().get(0).getUrl(), entry.getTitle(), feed.getDescription(), entry.getPublishedDate()));
+
+            }
+            return new ArticlesResponse(200, "OK", false, articles);
+        } catch (FeedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ArticlesResponse(500, "something went wrong", true, null);
     }
-
-
 }
