@@ -124,20 +124,20 @@ public class FeedsService {
     public ArticlesResponse getArticles(@QueryParam("feed_url") String feed_url) {
 
         SyndFeed feed = null;
+        String img = null;
         try {
             feed = new SyndFeedInput().build(new XmlReader(new URL(feed_url)));
             ArrayList<FeedArticle> articles = new ArrayList<>();
             for (int i = 0; i < feed.getEntries().size(); i++){
                SyndEntry entry = feed.getEntries().get(i);
-                String img;
                if (entry.getEnclosures() != null)
                    if (entry.getEnclosures().size() > 0) {
                         img = entry.getEnclosures().get(0).getUrl();
                    }
-
+                   else {
                        img = "";
-
-                    articles.add(new FeedArticle(img, entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate()));
+                   }
+                articles.add(new FeedArticle(img, entry.getTitle(), entry.getUri(), entry.getPublishedDate()));
 
             }
             return new ArticlesResponse(200, "OK", false, articles);
