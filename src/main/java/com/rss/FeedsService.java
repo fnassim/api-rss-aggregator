@@ -28,7 +28,6 @@ import java.util.List;
 
 @Path("/feeds")
 public class FeedsService {
-
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
@@ -130,7 +129,15 @@ public class FeedsService {
             ArrayList<FeedArticle> articles = new ArrayList<>();
             for (int i = 0; i < feed.getEntries().size(); i++){
                SyndEntry entry = feed.getEntries().get(i);
-                articles.add(new FeedArticle(entry.getEnclosures().get(0).getUrl(), entry.getTitle(), feed.getDescription(), entry.getPublishedDate()));
+                String img;
+               if (entry.getEnclosures() != null)
+                   if (entry.getEnclosures().size() > 0) {
+                        img = entry.getEnclosures().get(0).getUrl();
+                   }
+
+                       img = "";
+
+                    articles.add(new FeedArticle(img, entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate()));
 
             }
             return new ArticlesResponse(200, "OK", false, articles);
