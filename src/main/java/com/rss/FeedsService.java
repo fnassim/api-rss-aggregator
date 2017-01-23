@@ -136,7 +136,7 @@ public class FeedsService {
                    else {
                        img = "";
                    }
-                articles.add(new FeedArticle(img, entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate(), entry.getLink()));
+                articles.add(new FeedArticle(img, entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate().toString(), entry.getLink()));
 
             }
             return new ArticlesResponse(200, "OK", false, articles);
