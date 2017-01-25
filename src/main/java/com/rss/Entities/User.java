@@ -3,6 +3,7 @@ package com.rss.Entities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.google.gson.Gson;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -42,9 +43,9 @@ public class User {
 
     public String getPassword() { return this.password; }
 
-    public String userToJSON() throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+    public String userToJSON() {
+        Gson gson = new Gson();
 
-        return mapper.writeValueAsString(this);
+        return gson.toJson(this);
     }
 }

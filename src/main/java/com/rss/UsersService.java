@@ -35,13 +35,8 @@ public class UsersService {
         if (result.size() == 0) {
             return new ServiceResponse(404, "User doesn't exist", true);
         }
-        String userJSON = "";
-        try {
-            userJSON = result.get(0).userToJSON();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return new ServiceResponse(200, userJSON, false);
+//        String userJSON = result.get(0).userToJSON();
+        return new ServiceResponse(200, result.get(0), false);
     }
 
     @POST
@@ -67,7 +62,7 @@ public class UsersService {
         }
         session.close();
 
-        return new ServiceResponse(200, "mdp", false);
+        return new ServiceResponse(200, _user, false);
     }
 
     @POST
@@ -88,13 +83,8 @@ public class UsersService {
         if (result.size() == 0) {
             return new ServiceResponse(404, "User doesn't exist", true);
         }
-        String userJSON = "";
-        try {
-            userJSON = result.get(0).userToJSON();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return new ServiceResponse(200, userJSON, false);
+//        String userJSON = result.get(0).userToJSON();
+        return new ServiceResponse(200, result.get(0), false);
     }
 
 }
