@@ -14,13 +14,12 @@ import javax.validation.constraints.Pattern;
 @Table(name="feeds", uniqueConstraints= @UniqueConstraint(columnNames={"url", "user_id"}))
 public class Feed {
 
-//@Pattern(regexp="(^$|[0-9]{10})")
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @Column(name="url", unique = true)
+    @Column(name="url")
     private String url;
 
     @NotNull
