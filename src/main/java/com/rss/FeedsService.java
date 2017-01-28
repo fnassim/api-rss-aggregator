@@ -52,7 +52,10 @@ public class FeedsService {
 
             try {
                 rss = new SyndFeedInput().build(new XmlReader(new URL(result.get(i).getUrl())));
-                feed.add(new HomeFeed(result.get(i).getUrl(), rss.getTitle(), rss.getDescription()));
+                String url = result.get(i).getUrl() == null ? "" : result.get(i).getUrl();
+                String title = rss.getTitle() == null ? "" : rss.getTitle();
+                String description = rss.getDescription() == null ? "" : rss.getDescription();
+                feed.add(new HomeFeed(url, title, description));
             } catch (FeedException e) {
                 e.printStackTrace();
             } catch (IOException e) {
