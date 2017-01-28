@@ -67,7 +67,7 @@ public class FeedsService {
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public ServiceResponse newFeed(Feed _feed) {
+    public FeedResponse newFeed(Feed _feed) {
 
 
         SessionFactory sessionFactory;
@@ -82,11 +82,25 @@ public class FeedsService {
         try {
             tx.commit();
         } catch (PersistenceException e) {
-            return new ServiceResponse(403, "Username already exists", true);
+            return new FeedResponse(403, "Feed already exists", true, null);
         }
         session.close();
 
-        return new ServiceResponse(200, "new feed", false);
+        ArrayList<HomeFeed> newFeed = new ArrayList<>();
+        SyndFeed rss;
+        try {
+            rss = new SyndFeedInput().build(new XmlReader(new URL(_feed.getUrl())));
+            newFeed.add(new HomeFeed(_feed.getUrl(), rss.getTitle(), rss.getDescription()));
+        } catch (FeedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (newFeed.size() < 1)
+            return new FeedResponse(500, "Bad feed format", true, null);
+        else
+            return new FeedResponse(200, "Success", false, newFeed);
     }
 
     @DELETE
