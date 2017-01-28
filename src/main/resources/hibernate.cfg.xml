@@ -22,9 +22,9 @@
         <session-factory>
             <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
             <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-            <property name="connection.url">jdbc:mysql://us-cdbr-iron-east-04.cleardb.net/heroku_dd0dcda500af3c5</property>
-            <property name="connection.username">b0dc06d254f498</property>
-            <property name="connection.password">cdc67ff4</property>
+            <property name="connection.url">jdbc:mysql://us-cdbr-iron-east-04.cleardb.net/heroku_63393152ee05aa7?reconnect=true</property>
+            <property name="connection.username">b048cc594f6ec0</property>
+            <property name="connection.password">2cd3cb43</property>
             <property name="current_session_context_class">thread</property>
             <property name="hibernate.show_sql">false</property>
             <property name="hbm2ddl.auto">update</property>
