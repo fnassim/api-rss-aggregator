@@ -150,7 +150,13 @@ public class FeedsService {
                    else {
                        img = "";
                    }
-                articles.add(new FeedArticle(img, entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate().toString(), entry.getLink()));
+                String image = img == null ? "" : img;
+                String title = entry.getTitle() == null ? "" : entry.getTitle();
+                String description = entry.getDescription() == null ? "" : entry.getDescription().getValue();
+                String date = entry.getPublishedDate() == null ? "" : entry.getPublishedDate().toString();
+                String url = entry.getLink() == null ? "" : entry.getLink();
+//                articles.add(new FeedArticle(img, entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate().toString(), entry.getLink()));
+                articles.add(new FeedArticle(image, title, description, date, url));
 
             }
             return new ArticlesResponse(200, "OK", false, articles);
