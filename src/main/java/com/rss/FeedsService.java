@@ -55,7 +55,7 @@ public class FeedsService {
                 String url = result.get(i).getUrl() == null ? "" : result.get(i).getUrl();
                 String title = rss.getTitle() == null ? "" : rss.getTitle();
                 String description = rss.getDescription() == null ? "" : rss.getDescription();
-                feed.add(new HomeFeed(url, title, description));
+                feed.add(new HomeFeed(result.get(i).getId(), url, title, description));
             } catch (FeedException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -93,7 +93,7 @@ public class FeedsService {
         SyndFeed rss;
         try {
             rss = new SyndFeedInput().build(new XmlReader(new URL(_feed.getUrl())));
-            newFeed.add(new HomeFeed(_feed.getUrl(), rss.getTitle(), rss.getDescription()));
+            newFeed.add(new HomeFeed(_feed.getId(), _feed.getUrl(), rss.getTitle(), rss.getDescription()));
         } catch (FeedException e) {
             e.printStackTrace();
         } catch (IOException e) {
