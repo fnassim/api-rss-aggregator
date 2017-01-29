@@ -130,7 +130,7 @@ public class FeedsService {
             return new ServiceResponse(200, "Feed deleted", false);
         }
         else {
-            return new ServiceResponse(404, "Feed doesn't exists", false);
+            return new ServiceResponse(404, "Feed doesn't exists", true);
         }
     }
 
